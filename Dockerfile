@@ -1,4 +1,4 @@
-FROM python:3.9-slim
+FROM python:3.8-slim
 
 WORKDIR /app
 
@@ -7,7 +7,7 @@ RUN pip install -r requirements.txt
 
 COPY . .
 
-RUN chmod +x entrypoint.sh
+EXPOSE 5000
 
-CMD ["./entrypoint.sh"]
+CMD ["python", "app.py"]
 

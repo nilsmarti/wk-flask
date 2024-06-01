@@ -4,13 +4,27 @@ import sqlite3
 import os
 
 app = Flask(__name__)
-app.secret_key = os.eniron.get('SECRET_KEY')
+app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
 
 DATABASE = 'wanikani.db'
 
 def get_db():
     conn = sqlite3.connect(DATABASE)
     return conn
+
+def init_db():
+    conn = get_db()
+    cursor = conn.cursor()
+
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY,
+        api_key TEXT NOT NULL
+    )
+    ''')
+
+    conn.commit()
+    conn.close()
 
 @app.route('/')
 def home():
@@ -44,5 +58,8 @@ def dashboard():
     return render_template('dashboard.html', data=data)
 
 if __name__ == '__main__':
+    if not os.path.exists('/app'):
+        os.makedirs('/app')
+    init_db()
     app.run(host='0.0.0.0')
 
