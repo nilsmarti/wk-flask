@@ -1,30 +1,38 @@
-from flask import Flask, request, render_template, redirect, url_for, session
+from flask import Flask, request, render_template, redirect, url_for, session, g
 import requests
 import sqlite3
 import os
+import logging
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
 
-DATABASE = 'wanikani.db'
+DATABASE_DIR = '/app/data'
+DATABASE = os.path.join(DATABASE_DIR, 'wanikani.db')
 
 def get_db():
-    conn = sqlite3.connect(DATABASE)
-    return conn
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect(DATABASE)
+    return db
 
 def init_db():
-    conn = get_db()
-    cursor = conn.cursor()
+    with app.app_context():
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY,
+            api_key TEXT NOT NULL
+        )
+        ''')
+        db.commit()
 
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY,
-        api_key TEXT NOT NULL
-    )
-    ''')
-
-    conn.commit()
-    conn.close()
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
 
 @app.route('/')
 def home():
@@ -58,8 +66,11 @@ def dashboard():
     return render_template('dashboard.html', data=data)
 
 if __name__ == '__main__':
-    if not os.path.exists('/app'):
-        os.makedirs('/app')
-    init_db()
+    logging.basicConfig(level=logging.DEBUG)
+    os.makedirs(DATABASE_DIR, exist_ok=True)  # Ensure the directory exists
+    if not os.path.exists(DATABASE):
+        open(DATABASE, 'w').close()
+        os.chmod(DATABASE, 0o666)  # Ensure the file is writable
+    with app.app_context():
+        init_db()
     app.run(host='0.0.0.0')
-
