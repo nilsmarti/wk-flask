@@ -3,13 +3,13 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - main
+      - '**'  # Trigger on any branch push
   pull_request:
     branches:
-      - main
+      - '**'  # Trigger on any branch pull request
   create:
     tags:
-      - '*'
+      - '*'   # Trigger on any tag creation
 
 jobs:
   build-and-push:
@@ -35,8 +35,8 @@ jobs:
         with:
           images: ghcr.io/${{ github.repository_owner }}/wk-flask
           tags: |
-            type=ref,event=branch,branch=main,name=main
             type=ref,event=branch,branch=main,name=unstable
+            type=ref,event=branch,name={{ github.ref_name }}
             type=ref,event=tag,name=latest
             type=ref,event=tag
 
