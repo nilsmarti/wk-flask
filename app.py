@@ -3,6 +3,7 @@ import requests
 import sqlite3
 import os
 import logging
+from datetime import datetime
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('SECRET_KEY', 'default_secret_key')
@@ -73,8 +74,10 @@ def dashboard():
     assignments_response = requests.get('https://api.wanikani.com/v2/assignments', headers=headers)
     assignments_data = assignments_response.json()
 
+    now = datetime.utcnow().isoformat() + 'Z'
+
     lessons_count = sum(1 for item in assignments_data['data'] if item['data']['srs_stage'] == 0)
-    reviews_count = sum(1 for item in assignments_data['data'] if item['data']['srs_stage'] > 0)
+    reviews_count = sum(1 for item in assignments_data['data'] if item['data']['srs_stage'] > 0 and item['data']['available_at'] is not None and item['data']['available_at'] <= now)
 
     userdata['lessons_count'] = lessons_count
     userdata['reviews_count'] = reviews_count
