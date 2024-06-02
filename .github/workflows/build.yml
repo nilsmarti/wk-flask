@@ -7,6 +7,12 @@ on:
   pull_request:
     branches:
       - main
+  create:
+    tags:
+      - '*'
+  release:
+    types: 
+      - created
 
 jobs:
   build-and-push:
@@ -26,11 +32,18 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GHCR_PAT }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata for Docker
         id: meta
         uses: docker/metadata-action@v4
         with:
           images: ghcr.io/${{ github.repository_owner }}/wk-flask-app
+          tags: |
+            type=ref,event=branch,branch=main,name=main
+            type=ref,event=branch,branch=main,name=unstable
+            type=ref,event=tag,name=latest
+            type=ref,event=tag
+            type=ref,event=release,name=stable
+            type=ref,event=release
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
