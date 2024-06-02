@@ -63,7 +63,24 @@ def dashboard():
     response = requests.get('https://api.wanikani.com/v2/user', headers=headers)
     data = response.json()
 
-    return render_template('dashboard.html', data=data)
+    userdata = {
+        'username': data['data']['username'],
+        'level': data['data']['level'],
+        # add more userdata if needed
+    }
+
+    # Fetch lessons and reviews information
+    assignments_response = requests.get('https://api.wanikani.com/v2/assignments', headers=headers)
+    assignments_data = assignments_response.json()
+
+    lessons_count = sum(1 for item in assignments_data['data'] if item['data']['srs_stage'] == 0)
+    reviews_count = sum(1 for item in assignments_data['data'] if item['data']['srs_stage'] > 0)
+
+    userdata['lessons_count'] = lessons_count
+    userdata['reviews_count'] = reviews_count
+
+
+    return render_template('dashboard.html', userdata=userdata)
 
 if __name__ == '__main__':
     logging.basicConfig(level=logging.DEBUG)

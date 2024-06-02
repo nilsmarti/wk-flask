@@ -1,18 +1,29 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
-    <title>Dashboard</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .data { margin: 20px; padding: 20px; border: 1px solid #ccc; }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>WaniKani Dashboard</title>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <div class="data">
-        <pre>{{ data | tojson(indent=2) }}</pre>
-    </div>
-    <a href="/">Home</a>
+    <h1>Welcome, {{ userdata.username }}!</h1>
+    <p>Current Level: {{ userdata.level }}</p>
+    <p>Lessons Pending: {{ userdata.lessons_count }}</p>
+    <p>Reviews Pending: {{ userdata.reviews_count }}</p>
+    <!-- Add more fields as needed -->
+
+    <!-- Invisible tag for JavaScript access -->
+    <div id="userdata" style="display:none;">{{ userdata | tojson }}</div>
+
+    <script>
+        // JavaScript to access userdata
+        const userdata = JSON.parse(document.getElementById('userdata').textContent);
+        console.log(userdata.username);
+        console.log(userdata.level);
+        console.log(userdata.lessons_count);
+        console.log(userdata.reviews_count);
+        // Use userdata as needed
+    </script>
 </body>
 </html>
 
