@@ -1,6 +1,6 @@
 # WaniKani Dashboard implemented in Flask
 
-Simple Flask app to retrieve data from the WaniKani API.
+Simple Flask app to retrieve data from the WaniKani API. Currently the app retrieves the user's level, lessons and reviews pending. If you want to add more fields, feel free to open an issue or pull request.
 
 ## Self-Hosting
 
