@@ -1,12 +1,9 @@
-name: Build and Push Docker Image
+name: Build and Push Docker Image on Push
 
 on:
   push:
     branches:
-      - '**'
-  create:
-    tags:
-      - '*'
+      - main
 
 jobs:
   build-and-push:
@@ -33,8 +30,6 @@ jobs:
           images: ghcr.io/${{ github.repository_owner }}/wk-flask
           tags: |
             type=ref,event=branch,branch=main,name=dev
-            type=ref,event=tag,name=latest
-            type=ref,event=tag
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
