@@ -13,10 +13,10 @@ To self-host the app, you can use Docker. Here's a quick guide:
    docker pull ghcr.io/nilsmarti/wk-flask:latest
    ```
 
-3. Run the image:
+3. Run the image (note: replace `<your_secret_key>` with a random string of characters):
 
    ```bash
-   docker run -d -p 5000:5000 ghcr.io/nilsmarti/wk-flask:latest
+   docker run -d -p 5000:5000 -e SECRET_KEY=<your_secret_key> ghcr.io/nilsmarti/wk-flask:latest
    ```
 
 4. Open your web browser and navigate to `http://localhost:5000`.
@@ -29,10 +29,10 @@ To self-host the app, you can use Docker. Here's a quick guide:
    docker pull ghcr.io/nilsmarti/wk-flask:dev
    ```
 
-2. Run the image:
+2. Run the image (note: replace `<your_secret_key>` with a random string of characters):
 
    ```bash
-   docker run -d -p 5000:5000 ghcr.io/nilsmarti/wk-flask:dev
+   docker run -d -p 5000:5000 -e SECRET_KEY=<your_secret_key> ghcr.io/nilsmarti/wk-flask:dev
    ```
 
 3. Open your web browser and navigate to `http://localhost:5000`.
