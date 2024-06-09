@@ -8,11 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>WaniKani Dashboard</title>
     <style>
-        body.dark-mode {
-            background-color: #4d4d4d;
+        body.dark-mode, body.system-dark-mode {
+            background-color: #1d1f21;
             color: #ffffff;
         }
-        body.light-mode {
+        body.light-mode, body.system-light-mode {
             background-color: #ffffff;
             color: #000000;
         }
@@ -46,7 +46,7 @@
         }
     </style>
 </head>
-<body class="dark-mode">
+<body>
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
     <div class="container">
         <div class="username">
@@ -79,20 +79,49 @@
         function toggleTheme() {
             const body = document.body;
             if (body.classList.contains('dark-mode')) {
-                body.classList.replace('dark-mode', 'light-mode');
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
                 localStorage.setItem('theme', 'light');
-            } else {
-                body.classList.replace('light-mode', 'dark-mode');
+            } else if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
                 localStorage.setItem('theme', 'dark');
+            } else {
+                // Default system preference
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                }
             }
         }
 
-        // Check for saved theme in localStorage
+        // Check for saved theme in localStorage or use system preference
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
-                document.body.classList.remove('dark-mode', 'light-mode');
-                document.body.classList.add(`${savedTheme}-mode`);
+                document.body.classList.add(savedTheme + '-mode');
+            } else {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('system-dark-mode');
+                } else {
+                    document.body.classList.add('system-light-mode');
+                }
+            }
+        });
+
+        // Listen for changes in system theme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (!localStorage.getItem('theme')) {
+                if (event.matches) {
+                    document.body.classList.remove('system-light-mode');
+                    document.body.classList.add('system-dark-mode');
+                } else {
+                    document.body.classList.remove('system-dark-mode');
+                    document.body.classList.add('system-light-mode');
+                }
             }
         });
     </script>

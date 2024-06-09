@@ -6,11 +6,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
     <title>Home</title>
     <style>
-        body.dark-mode {
+        body.dark-mode, body.system-dark-mode {
             background-color: #4d4d4d;
-            color: #c5c8c6;
+            color: #ffffff;
         }
-        body.light-mode {
+        body.light-mode, body.system-light-mode {
             background-color: #ffffff;
             color: #000000;
         }
@@ -37,14 +37,14 @@
             right: 1rem;
             padding: 0.5rem 1rem;
             cursor: pointer;
-            background-color: #007bff;
+            background-color: #000000;
             color: white;
             border: none;
             border-radius: 5px;
         }
     </style>
 </head>
-<body class="dark-mode">
+<body>
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
     <div class="home">
         <div class="title">
@@ -68,20 +68,49 @@
         function toggleTheme() {
             const body = document.body;
             if (body.classList.contains('dark-mode')) {
-                body.classList.replace('dark-mode', 'light-mode');
+                body.classList.remove('dark-mode');
+                body.classList.add('light-mode');
                 localStorage.setItem('theme', 'light');
-            } else {
-                body.classList.replace('light-mode', 'dark-mode');
+            } else if (body.classList.contains('light-mode')) {
+                body.classList.remove('light-mode');
+                body.classList.add('dark-mode');
                 localStorage.setItem('theme', 'dark');
+            } else {
+                // Default system preference
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    body.classList.add('light-mode');
+                    localStorage.setItem('theme', 'light');
+                } else {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                }
             }
         }
 
-        // Check for saved theme in localStorage
+        // Check for saved theme in localStorage or use system preference
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
-                document.body.classList.remove('dark-mode', 'light-mode');
-                document.body.classList.add(`${savedTheme}-mode`);
+                document.body.classList.add(savedTheme + '-mode');
+            } else {
+                if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.body.classList.add('system-dark-mode');
+                } else {
+                    document.body.classList.add('system-light-mode');
+                }
+            }
+        });
+
+        // Listen for changes in system theme preference
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (!localStorage.getItem('theme')) {
+                if (event.matches) {
+                    document.body.classList.remove('system-light-mode');
+                    document.body.classList.add('system-dark-mode');
+                } else {
+                    document.body.classList.remove('system-dark-mode');
+                    document.body.classList.add('system-light-mode');
+                }
             }
         });
     </script>
