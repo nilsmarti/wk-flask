@@ -50,6 +50,14 @@
             padding: 0.5rem 1rem;
             cursor: pointer;
         }
+        .login-input {
+            background-color: #ffffff;
+            color: #000000;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -61,7 +69,7 @@
         <div class="login">
             <form method="post">
                 <label for="api_key">API Key:</label>
-                <input type="text" id="api_key" name="api_key" required>
+                <input type="text" id="api_key" name="api_key" required class="login-input">
                 <button type="submit" class="login-button">Login</button>
             </form>
         </div>
