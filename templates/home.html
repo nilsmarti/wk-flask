@@ -42,6 +42,14 @@
             border: none;
             border-radius: 5px;
         }
+        .login-button {
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -54,12 +62,12 @@
             <form method="post">
                 <label for="api_key">API Key:</label>
                 <input type="text" id="api_key" name="api_key" required>
-                <button type="submit">Login</button>
+                <button type="submit" class="login-button">Login</button>
             </form>
         </div>
         <div class="help">
             <p>To get your API key, go to <a href="https://www.wanikani.com/settings/api">https://www.wanikani.com/settings/api</a> and click "Create API Key".</p>
-            <p>If you have any questions, feel free to <a href="https://github.com/wanikani/wk-flask/issues">open an issue on GitHub</a>.</p>
+            <p>If you have any questions, feel free to <a href="https://github.com/nilsmarti/wk-flask/issues">open an issue on GitHub</a>.</p>
         </div>
     </div>
 
