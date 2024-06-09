@@ -1,11 +1,41 @@
 <!doctype html>
 <html>
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
     <title>Home</title>
+    <style>
+        body.dark-mode {
+            background-color: #4d4d4d;
+            color: #c5c8c6;
+        }
+        body.light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        h1, p {
+            font-family: 'Source Code Pro', monospace;
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to WaniKani Dashboard</h1>
-    <a href="/login">Login</a>
+    <div class="home"></div>
+        <div class="title">
+            <h1>Welcome to your WaniKani Dashboard</h1>
+        </div>
+        <div class="login">
+            <form method="post">
+                <label for="api_key">API Key:</label>
+                <input type="text" id="api_key" name="api_key" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div class="help">
+            <p>To get your API key, go to <a href="https://www.wanikani.com/settings/api">https://www.wanikani.com/settings/api</a> and click "Create API Key".</p>
+            <p>If you have any questions, feel free to <a href="https://github.com/wanikani/wk-flask/issues">open an issue on GitHub</a>.</p>
+        </div>
+    </div>
 </body>
 </html>
 

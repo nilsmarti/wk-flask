@@ -35,8 +35,19 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def home():
+    if request.method == 'POST':
+        api_key = request.form['api_key']
+        session['api_key'] = api_key
+
+        conn = get_db()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO users (api_key) VALUES (?)", (api_key,))
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('dashboard'))
     return render_template('home.html')
 
 @app.route('/login', methods=['GET', 'POST'])

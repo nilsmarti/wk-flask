@@ -1,15 +1,67 @@
 <!doctype html>
 <html lang="en">
 <head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,200..900;1,200..900&display=swap" rel="stylesheet">
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>WaniKani Dashboard</title>
+    <style>
+        body.dark-mode {
+            background-color: #4d4d4d;
+            color: #ffffff;
+        }
+        body.light-mode {
+            background-color: #ffffff;
+            color: #000000;
+        }
+        h1, p {
+            font-family: 'Source Code Pro', monospace;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100vh;
+        }
+        .username, .level, .lessons, .reviews {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .theme-toggle {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            background-color: #000000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
 </head>
-<body>
-    <h1>Welcome, {{ userdata.username }}!</h1>
-    <p>Current Level: {{ userdata.level }}</p>
-    <p>Lessons Pending: {{ userdata.lessons_count }}</p>
-    <p>Reviews Pending: {{ userdata.reviews_count }}</p>
+<body class="dark-mode">
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Theme</button>
+    <div class="container">
+        <div class="username">
+            <h1>Welcome, {{ userdata.username }}!</h1>
+        </div>
+        <div class="level">
+            <p>Current Level: {{ userdata.level }}</p>
+        </div>
+        <div class="lessons">
+            <p>Lessons Pending: {{ userdata.lessons_count }}</p>
+        </div>
+        <div class="reviews">
+            <p>Reviews Pending: {{ userdata.reviews_count }}</p>
+        </div>
+    </div>
     <!-- Add more fields as needed -->
 
     <!-- Invisible tag for JavaScript access -->
@@ -22,8 +74,27 @@
         console.log(userdata.level);
         console.log(userdata.lessons_count);
         console.log(userdata.reviews_count);
-        // Use userdata as needed
+
+        // Function to toggle theme
+        function toggleTheme() {
+            const body = document.body;
+            if (body.classList.contains('dark-mode')) {
+                body.classList.replace('dark-mode', 'light-mode');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.classList.replace('light-mode', 'dark-mode');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Check for saved theme in localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.classList.remove('dark-mode', 'light-mode');
+                document.body.classList.add(`${savedTheme}-mode`);
+            }
+        });
     </script>
 </body>
 </html>
-
